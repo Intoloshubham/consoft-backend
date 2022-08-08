@@ -52,7 +52,7 @@ const ReportController = {
                     const bodyData = {
                         report_id:report_id,
                         user_id:user_id,
-                        inputs:inputs,
+                        inputs:inputs, 
                     }
                     
                     QuantityReportController.store(bodyData).then((result, err)=>{
@@ -60,7 +60,6 @@ const ReportController = {
                             res.send(CustomSuccessHandler.success('Quantity item report created successfully'))
                         }else{
                             return (err);
-
                         }
                     });
                     break;
