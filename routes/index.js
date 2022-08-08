@@ -188,7 +188,6 @@ router.put('/quantity-report/:id', QuantityReportController.update);
 router.get('/quantity-item-exist/:project_id/:user_id', QuantityReportController.quantityItemExist);
 router.put('/quantity-report/:id', QuantityReportController.update);
 
->>>>>>> 26d51d4b8794b93cfea20cf89b903a0f74b19113
 
 
 // report item
