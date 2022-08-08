@@ -95,6 +95,7 @@ const QuantityReportController = {
                         _id: 1,
                         quantity_report_id: 1,
                         item_id: 1,
+                        unit_name: 1,
                         num_length: 1,
                         num_width: 1,
                         num_height: 1,
