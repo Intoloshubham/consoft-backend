@@ -67,6 +67,10 @@ export { default as Attendance } from './user-profile/Attendance.js';
 //payment
 export { default as Payment } from './payment/Payment.js';
 
+//ForgetPassword
+export {default as ForgetPassword} from './forget-password/ForgetPassword.js';
+
+
 // water level
 export { default as WaterLevel } from './water-level/WaterLevel.js';
 export { default as WaterSetting } from './water-level/WaterSetting.js';

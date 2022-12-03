@@ -32,7 +32,7 @@ import {
     RevertController, VerifyController, AttendanceController,
 
     //water level
-    WaterLevelController, WaterSettingController, VoucherController,
+    WaterLevelController, WaterSettingController, VoucherController, ForgetPasswordController,
 
 
 } from '../controllers/index.js';
@@ -73,6 +73,11 @@ router.get('/privilege-by-users/:company_id/:privilege_id', userController.privi
 
 router.post('/refresh', refreshController.refresh);
 router.post('/logout', loginController.logout);
+
+//forgetPassword
+router.post('/forget-password',ForgetPasswordController.forgetPassword);
+router.put('/verify-otp/:id',ForgetPasswordController.verifyOtp);
+
 
 //payment
 router.get('/payment', PaymentController.index);
