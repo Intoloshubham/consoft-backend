@@ -11,6 +11,10 @@ export { default as UserPrivilegeController } from './company/UserPrivilegeContr
 //mail
 // export { default as MailControllher } from './MailController.js';
 
+//forget password
+export { default as ForgetPasswordController } from '../controllers/forget-password/ForgetPasswordController.js';
+
+
 //product 
 export { default as ProductKeyController } from '../controllers/auth/ProductKeyController.js';
 
