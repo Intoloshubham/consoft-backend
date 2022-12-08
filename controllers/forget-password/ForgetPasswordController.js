@@ -14,7 +14,7 @@ const ForgetPasswordController = {
     const existMail = await User.findOne({ email: email });
 
     if (!existMail) {
-      return next(CustomSuccessHandler.customMessage("Email does not exist"));
+      return next(CustomSuccessHandler.customMessage({msg:"Email does not exist",status:"401"}));
     }
 
     const temp_otp = await CustomFunction.randomNumber();
