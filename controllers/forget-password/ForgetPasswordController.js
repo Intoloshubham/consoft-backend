@@ -8,11 +8,10 @@ import transporter from "../../config/emailConfig.js";
 import { EMAIL_FROM } from "../../config/index.js";
 
 const ForgetPasswordController = {
-
   async forgetPassword(req, res, next) {
     let temp;
     const { user_id, email, otp } = req.body;
-    const existMail = await User.findOne({  email: email });
+    const existMail = await User.findOne({ email: email });
 
     if (!existMail) {
       return next(CustomSuccessHandler.customMessage("Email does not exist"));
@@ -22,56 +21,63 @@ const ForgetPasswordController = {
     const hashOtp = await bcrypt.hash(temp_otp.toString(), 10);
 
     const forget = new ForgetPassword({
-      user_id:existMail._id,
+      user_id: existMail._id,
       otp: hashOtp,
-      email
+      email,
     });
-    
+
     temp = await forget.save();
 
     if (temp) {
-
       let info = transporter.sendMail({
         from: EMAIL_FROM,
         to: email,
         subject: "Forget Password Otp",
         text: "Your password reseting Otp   " + temp_otp,
       });
-
     }
 
-    res.status(200).json({ success: true, data: `Otp sent to ${email}` });
+    res
+      .status(200)
+      .json({
+        success: true,
+        data: { msg: `Otp sent to ${email}`, res: temp },
+      });
   },
 
   async verifyOtp(req, res, next) {
-    
     const { user_id, email, otp, password } = req.body;
 
-    const existMail = await User.findOne({  email: email });
-
+    const existMail = await User.findOne({ _id: req.params.user_id });
 
     const exist = await ForgetPassword.findOne({
-      user_id: existMail._id,
-      email: email
+      user_id: req.params.user_id,
+      email: existMail.email,
     });
+     if (exist) {
+       const isMatch = await bcrypt.compare(otp.toString(), exist.otp);
+       if (existMail.email === exist.email && isMatch) {
+         res.status(200).json({ success: true, data: `Otp verified sucessfully` });
+   
+         await ForgetPassword.deleteOne({ user_id: req.params.user_id });
+         // await ForgetPassword.findByIdAndRemove({ user_id: req.params.user_id });
+       } else {
+         res.status(400).json({ success: false, data:{msg: `Otp not matched`,isMatch:isMatch} });
+       }      
+     }
 
-    const isMatch = await bcrypt.compare(otp.toString(), exist.otp);
-
-    if (email == exist.email && isMatch) {
-      res.status(200).json({ success: true, data: `Otp verified sucessfully` });
-    }
   },
 
-  async resetPassword(req,res,next) {
-    
-    const { user_id, email, otp, password, confirm_new_password } = req.body;
-    const hashedPassword = await bcrypt.hash(password.toString(), 10);
-  
-    if (password == confirm_new_password) {
-      const filter = { _id: req.params.id };
+  async resetPassword(req, res, next) {
+    const { user_id, email, otp, new_password, confirm_new_password } =
+      req.body;
+    const hashedPassword = await bcrypt.hash(new_password.toString(), 10);
+
+    if (new_password == confirm_new_password) {
+      const filter = { _id: req.params.user_id };
       const updateDocument = {
         $set: {
-          password: hashedPassword
+          password: hashedPassword,
         },
       };
 
@@ -87,7 +93,11 @@ const ForgetPasswordController = {
         .status(200)
         .json({ success: true, data: `Password updated sucessfully!` });
     } else {
-        return next(CustomErrorHandler.alreadyExist(`New Password & Confirm New Password do not match!`));
+      return next(
+        CustomErrorHandler.alreadyExist(
+          `New Password & Confirm New Password do not match!`
+        )
+      );
     }
   },
 };

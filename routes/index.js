@@ -76,8 +76,8 @@ router.post('/logout', loginController.logout);
 
 //forgetPassword
 router.post('/forget-password',ForgetPasswordController.forgetPassword);
-router.put('/verify-otp',ForgetPasswordController.verifyOtp);
-router.put('/reset-password/:id',ForgetPasswordController.resetPassword);
+router.put('/verify-otp/:user_id',ForgetPasswordController.verifyOtp);
+router.put('/reset-password/:user_id',ForgetPasswordController.resetPassword);
 
 
 //payment
